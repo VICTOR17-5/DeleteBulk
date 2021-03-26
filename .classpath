@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="/ARCHIVOS_JAR/json/java-json.jar"/>
+	<classpathentry kind="lib" path="/ARCHIVOS_JAR/HTTP/commons-codec-1.11.jar"/>
+	<classpathentry kind="lib" path="/ARCHIVOS_JAR/HTTP/commons-logging-1.2.jar"/>
+	<classpathentry kind="lib" path="/ARCHIVOS_JAR/HTTP/httpclient-4.5.13.jar"/>
+	<classpathentry kind="lib" path="/ARCHIVOS_JAR/HTTP/httpcore-4.4.13.jar"/>
+	<classpathentry kind="lib" path="/ARCHIVOS_JAR/mysql/mysql-connector-java-8.0.15.jar"/>
+	<classpathentry kind="lib" path="/ARCHIVOS_JAR/sqljdbc_9.2/mssql-jdbc-9.2.1.jre8.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
