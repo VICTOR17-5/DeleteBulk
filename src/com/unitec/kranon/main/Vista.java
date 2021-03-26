@@ -103,7 +103,6 @@ public class Vista extends JFrame {
 					voValidateThread = new ThreadValidate(voBuffer, vaConfi, vsUUI, voStringBuffer, voMapProduccion, voMapEliminados, voConexionMySQL);
 					voValidateThread.start();
 				} 
-				
 				voButtonEliminar.setEnabled(true);
 
 			}
@@ -137,10 +136,6 @@ public class Vista extends JFrame {
 		} else {
 			JOptionPane.showMessageDialog(this, "SELECCIONE EL TIPO DE CONEXIÓN A UTILIZAR.","CONNECTION FAILED.",JOptionPane.WARNING_MESSAGE);
 		}
-		
-		
-		
-		
 	}
 	
 	private void initComponents() {
