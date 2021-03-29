@@ -49,15 +49,11 @@ public class Vista extends JFrame {
     
 	
 	public Vista() {
-		Log.GuardaLog("****************************** INICIANDO ******************************");
 		initComponents();
 		vsUUI = java.util.UUID.randomUUID().toString();
 		voUti = new Utilidades();
-		Log.GuardaLog("[" + new Date() + "][" + vsUUI + "][Vista][INFO] ---> INICIANDO PROCESO...");
-		if (voUti.getProperty(vaConfi, vsConfi)) {
-			Log.vsRutaLog = vaConfi[2];
-		}
-		
+		Log.GuardaLog("[" + new Date() + "][" + vsUUI + "] ************************************** INICIANDO PROCESO **************************************");
+		if (voUti.getProperty(vaConfi, vsConfi)) Log.vsRutaLog = vaConfi[2];
 	}
 	
 	private void ActionButtonBuscar(ActionEvent evt) {   
@@ -79,7 +75,7 @@ public class Vista extends JFrame {
 	
 	private void ActionButtonValidate(ActionEvent evt) {
 		if(!voRadioButtonSQL.isSelected() && !voRadioButtonMySQL.isSelected()) {
-			Log.GuardaLog("[" + new Date() + "][" + vsUUI + "][Vista][WARNING] ---> NO SE ENCONTRO UNA CONEXIÓN A UNA BASE DE DATOS.");
+			Log.GuardaLog("[" + new Date() + "][" + vsUUI + "][ActionButtonValidate][WARNING] ---> NO SE ENCONTRO UNA CONEXIÓN A UNA BASE DE DATOS.");
 			JOptionPane.showMessageDialog(this, "SELECCIONE EL TIPO DE CONEXIÓN A UTILIZAR.","CONNECTION FAILED.",JOptionPane.WARNING_MESSAGE);
 			return;
 		}
@@ -122,16 +118,15 @@ public class Vista extends JFrame {
 	}
 	
 	private void ActionButtonConectionSQL(ActionEvent evt) {
+		Log.GuardaLog("[" + new Date() + "][" + vsUUI + "][ActionButtonConectionSQL][INFO] ---> INICIANDO TEST DE CONEXION.");
 		if(voRadioButtonSQL.isSelected()) {
 			ConexionSQL voConexionSQL = new ConexionSQL(vsUUI);
-			Boolean vbTest = voConexionSQL.getConnection();
-			if(vbTest) JOptionPane.showMessageDialog(this, "CONEXIÓN SQL EXITOSA.","CONNECTION SUCCESSFUL",JOptionPane.INFORMATION_MESSAGE);
+			if(voConexionSQL.getConnection()) JOptionPane.showMessageDialog(this, "CONEXIÓN SQL EXITOSA.","CONNECTION SUCCESSFUL",JOptionPane.INFORMATION_MESSAGE);
 			else JOptionPane.showMessageDialog(this, "ERROR SQL,NO SE LOGRO ESTABLECER CONEXIÓN.","CONNECTION  FAILED.",JOptionPane.WARNING_MESSAGE);
 		}
 		else if(voRadioButtonMySQL.isSelected()) {
 			ConexionMySQL voConexionSQL = new ConexionMySQL(vsUUI);
-			Boolean vbTest = voConexionSQL.getConnection();
-			if(vbTest) JOptionPane.showMessageDialog(this, "CONEXIÓN MySQL EXITOSA.","CONNECTION SUCCESSFUL",JOptionPane.INFORMATION_MESSAGE);
+			if(voConexionSQL.getConnection()) JOptionPane.showMessageDialog(this, "CONEXIÓN MySQL EXITOSA.","CONNECTION SUCCESSFUL",JOptionPane.INFORMATION_MESSAGE);
 			else JOptionPane.showMessageDialog(this, "ERROR MYSQL, NO SE LOGRO ESTABLECER CONEXIÓN.","CONNECTION FAILED.",JOptionPane.WARNING_MESSAGE);
 		} else {
 			JOptionPane.showMessageDialog(this, "SELECCIONE EL TIPO DE CONEXIÓN A UTILIZAR.","CONNECTION FAILED.",JOptionPane.WARNING_MESSAGE);
