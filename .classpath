@@ -9,6 +9,6 @@
 	<classpathentry kind="lib" path="/ARCHIVOS_JAR/HTTP/httpcore-4.4.13.jar"/>
 	<classpathentry kind="lib" path="/ARCHIVOS_JAR/mysql/mysql-connector-java-8.0.15.jar"/>
 	<classpathentry kind="lib" path="/ARCHIVOS_JAR/sqljdbc_9.2/mssql-jdbc-9.2.1.jre8.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Victor Paredes/Downloads/liquidlnf.jar"/>
+	<classpathentry kind="lib" path="jars/liquidlnf.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
