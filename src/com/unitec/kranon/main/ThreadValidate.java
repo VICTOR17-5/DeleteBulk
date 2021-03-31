@@ -28,6 +28,8 @@ public class ThreadValidate extends Thread {
 	private ConexionMySQL voConexionMySQL = null;
 	private ConexionSQL voConexionSQL = null;
 	
+	Integer viCont = 1;
+	
 	public ThreadValidate(Buffer voBuffer, String[] vaConfi, String vsUUI, StringBuffer vsStringBuffer, 
 			Map<String, List<String>> voMapProduccion, Map<String, List<String>> voMapEliminados, ConexionMySQL voConexionMySQL) {
 		this.voConexionMySQL = voConexionMySQL;
@@ -57,6 +59,10 @@ public class ThreadValidate extends Thread {
 			voBuffer.SetFin(true);
 			Log.GuardaLog("[" + new Date() + "][" + vsUUI + "][ThreadValidate][ERROR] ---> NO SE ENCONTRO UNA CONEXIÓN A UNA BASE DE DATOS.");
 			return;
+		}
+		
+		if(voConexionMySQL != null) {
+			
 		}
 		Log.GuardaLog("productivos","************************************** REGISTROS PRODUCTIVOS **************************************");
 		Log.GuardaLog("aEliminar", "************************************** REGISTROS A ELIMINAR **************************************");
@@ -92,6 +98,7 @@ public class ThreadValidate extends Thread {
 		Log.GuardaLog("[" + new Date() + "][" + vsUUI + "][ThreadValidate][INFO] ---> NUMERO DE LINEAS LEIDAS[" + viContadorLine + "], "
 				+ "NUMERO DE KEY[" + voListContenido.size() + "], NUMERO DE LINEAS CON ERRORES[" + vlListBadFormat.size() + "]");
 		
+		
 		for (Entry<String, List<String>> voEntryPersona : voListContenido.entrySet()) {
 			String vsNumPersona = voEntryPersona.getKey();
 			List<String> voDatosPersona = voEntryPersona.getValue();	
@@ -111,14 +118,13 @@ public class ThreadValidate extends Thread {
 				}
 				else if(voConexionMySQL != null) {
 					String vsQuery = "SELECT * FROM " + vaConfi[4] + " "
-							+ "WHERE [NPersona] = '" + vsNumPersona + "' "
-								+ "and [ContactId] = '" + vsContactId + "' "
-								+ "and [ContactListId] = '" + vsContactListId + "'";
+							+ "WHERE NPersona = '" + vsNumPersona + "' "
+								+ "and contactId = '" + vsContactId + "' "
+								+ "and contactListId = '" + vsContactListId + "';";
 					voResultado = voConexionMySQL.ExecuteSelect(vsQuery);
 				}
 				else Log.GuardaLog("[" + new Date() + "][" + vsUUI + "][ThreadValidate][ERROR] ---> NO EXISTE UNA CONEXION A UNA BASE DE DATOS.");
 
-				
 				Boolean vbExisteEnSQL = false;
 				if (voResultado == null) {
 					voBuffer.SetFin(true);
@@ -131,7 +137,6 @@ public class ThreadValidate extends Thread {
 						Log.GuardaLog("[" + new Date() + "][" + vsUUI + "][ThreadValidate][ERROR] ---> ERROR SQL/MYSQL: " + e.getMessage());
 					}
 				}
-				
 				
 				if (vbExisteEnSQL) {
 					viContadorProduccion++;
@@ -146,7 +151,7 @@ public class ThreadValidate extends Thread {
 					}
 					Log.GuardaLog("[" + new Date() + "][" + vsUUI + "][ThreadValidate][INFO] ---> [PRODUCTIVO] REGISTRO[" + vsNumPersona + "," + vsContactListId + "," + vsContactId + "]");
 					Log.GuardaLog("productivos", "[" + new Date() + "][" + vsUUI + "][ThreadValidate][INFO] ---> REGISTRO [" + vsNumPersona + ", " + vsContactListId + ", " + vsContactId + "]");
-					voBuffer.SetBuffer("[PRODUCTIVO] " + voEntryContact + "\n");
+					voBuffer.SetBuffer("[" + (viCont++) + "][PRODUCTIVO] " + voEntryContact + "\n");
 					if (voMapNoDuplicados.get(vsNumPersona) == null) {
 						Map<String,String> vlContacts = new HashMap<String,String>();
 						vlContacts.put(vsContactId, vsContactListId);
@@ -169,24 +174,22 @@ public class ThreadValidate extends Thread {
 					}
 					Log.GuardaLog("[" + new Date() + "][" + vsUUI + "][ThreadValidate][INFO] ---> [PARA ELIMINAR] REGISTRO[" + vsNumPersona + "," + vsContactListId + "," + vsContactId + "]");
 					Log.GuardaLog("aEliminar", "[" + new Date() + "][" + vsUUI + "][ThreadValidate][INFO] ---> REGISTRO [" + vsNumPersona + ", " + vsContactListId + ", " + vsContactId + "]");
-					voBuffer.SetBuffer("[NO PRODUCTIVO] " + voEntryContact + "\n");
+					voBuffer.SetBuffer("[" + (viCont++) + "][NO PRODUCTIVO] " + voEntryContact + "\n");
 				}
-
 			}
 		}
 		
 		Log.GuardaLog("[" + new Date() + "][" + vsUUI + "][ThreadValidate][INFO] ---> NUMERO DE REGISTROS TOTALES[" + (viContadorProduccion + viContadorEliminar) + "]");
-		voConexionSQL.closeConnection();
-		
+		if(voConexionSQL != null) voConexionSQL.closeConnection();
+		else if(voConexionMySQL != null) voConexionMySQL.closeConnection();
+
 		Integer viContadorSinDuplicar = 0;
 		for (Entry<String, Map<String,String>> voEntryPersona : voMapNoDuplicados.entrySet()) 
 			for(@SuppressWarnings("unused") Entry<String, String> voEntry : voEntryPersona.getValue().entrySet()) 
 				viContadorSinDuplicar++;
-
-		
 		
 		voBuffer.SetBuffer("\nREGISTROS ENCONTRADOS EN PRODUCCION [" + viContadorProduccion + "]");
-		voBuffer.SetBuffer("\nREGISTROS ENCONTRADOS EN PRODUCCION SIN DUPLICAR[" + viContadorSinDuplicar + "]");
+		voBuffer.SetBuffer("\nREGISTROS UNICOS ENCONTRADOS EN PRODUCCION[" + viContadorSinDuplicar + "]");
 		voBuffer.SetBuffer("\nREGISTROS NO ENCONTRADOS, PARA ELIMINAR [" + viContadorEliminar + "]");
 		voBuffer.SetBuffer("\nREGISTROS TOTALES [" + (viContadorProduccion + viContadorEliminar) + "]");
 		

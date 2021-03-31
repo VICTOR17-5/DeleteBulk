@@ -22,33 +22,49 @@ public class ConexionMySQL {
 	private String userName = "sa";
 	private String password = "Kranon01#";
 	
+	private Process voProcess = null;
+	
+	private String vsProxy = "\"C:/Appl/UNITEC/DeleteRegistro/Proxy/cloud_sql_proxy.exe\" "
+			+ "-instances=\"visualdialer:us-central1:insertcontactunitec\"=tcp:" + portNumber + " "
+			+ "-credential_file=\"C:/Appl/UNITEC/DeleteRegistro/Proxy/visualdialer-6c40d83db191.json\" &";
+	
 	public ConexionMySQL(String vsUUI) {
 		this.vsUUI = vsUUI;
 		Properties properties = new Properties();
 		 try {
-			Class.forName("com.mysql.jdbc.Driver");
+			Class.forName("com.mysql.cj.jdbc.Driver");
 			properties.load(new FileReader(vsConfi));
 			serverName = properties.getProperty("MySQL_ServerName");
 			portNumber = properties.getProperty("MySQL_Port");
 			database = properties.getProperty("MySQL_DataBase");
 			userName = properties.getProperty("MySQL_UserName");
 			password = properties.getProperty("MySQL_Password");
-			String urlSQL = url + serverName + ":" + portNumber + ";" + "databaseName=" + database + ";";
+			String urlSQL = url + serverName + ":" + portNumber + "/" + database + "?useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC";
 			voConnection = java.sql.DriverManager.getConnection(urlSQL,userName,password);
 			Log.GuardaLog("[" + new Date() + "][" + vsUUI + "][ConexionMySQL][INFO] ---> CONEXION[SUCCESS].");
 		} catch (IOException e) {
-			Log.GuardaLog("[" + new Date() + "][" + vsUUI + "][ConexionMySQL][ERROR] ---> " + e.getMessage());
+			Log.GuardaLog("[" + new Date() + "][" + vsUUI + "][ConexionMySQL][ERROR] ---> IOException: " + e.getMessage());
 		} catch (ClassNotFoundException e) {
-			Log.GuardaLog("[" + new Date() + "][" + vsUUI + "][ConexionMySQL][ERROR] ---> " + e.getMessage());
+			Log.GuardaLog("[" + new Date() + "][" + vsUUI + "][ConexionMySQL][ERROR] ---> ClassNotFoundException: " + e.getMessage());
 		} catch (SQLException e) {
-			Log.GuardaLog("[" + new Date() + "][" + vsUUI + "][ConexionMySQL][ERROR] ---> " + e.getMessage());
+			Log.GuardaLog("[" + new Date() + "][" + vsUUI + "][ConexionMySQL][ERROR] ---> SQLException:" + e.getMessage().replace("\n", " "));
 		}
+	}
+	
+	public void CreateProxy() {
+		Runtime aplicacion = Runtime.getRuntime(); 
+		try{
+        	voProcess = aplicacion.exec(vsProxy); 
+        }catch(Exception e){
+        	Log.GuardaLog("[" + new Date() + "][" + vsUUI + "][CreateProxy][ERROR] ---> EXEC: " + e.getMessage());
+        }
 	}
 	
 	public Boolean getConnection() {
 		if(voConnection == null) return false;
 		try {
 			voConnection.close();
+			voProcess.destroy();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -74,7 +90,6 @@ public class ConexionMySQL {
 			 if (voConnection != null) {
 				  Statement select = voConnection.createStatement(); 
 				  ResultSet viResultado = select.executeQuery(vsQuery);
-				  select.close();
 				  return viResultado;
 			 } else Log.GuardaLog("[" + new Date() + "][" + vsUUI + "][ExecuteSelect][WARNING] ---> NO EXISTE UNA CONEXION A LA BASE DE DATOS.");
 	 	} catch (Exception e) {
@@ -87,6 +102,7 @@ public class ConexionMySQL {
 		 try {
 			 if (voConnection != null) {
 				 voConnection.close();
+				 voProcess.destroy();
 			 }
 		 } catch (Exception e) {
 			 Log.GuardaLog("[" + new Date() + "][" + vsUUI + "][closeConnection][ERROR] ---> " + e.getMessage());

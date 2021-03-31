@@ -94,6 +94,7 @@ public class Vista extends JFrame {
 					voValidateThread.start();
 				} else if(voRadioButtonMySQL.isSelected()) {
 					ConexionMySQL voConexionMySQL = new ConexionMySQL(vsUUI);
+					voConexionMySQL.CreateProxy();
 					voWrite = new WriteTextArea(voBuffer, voTextAreaResultados);
 					voWrite.start();
 					voValidateThread = new ThreadValidate(voBuffer, vaConfi, vsUUI, voStringBuffer, voMapProduccion, voMapEliminados, voConexionMySQL);
@@ -126,11 +127,10 @@ public class Vista extends JFrame {
 		}
 		else if(voRadioButtonMySQL.isSelected()) {
 			ConexionMySQL voConexionSQL = new ConexionMySQL(vsUUI);
+			voConexionSQL.CreateProxy();
 			if(voConexionSQL.getConnection()) JOptionPane.showMessageDialog(this, "CONEXIÓN MySQL EXITOSA.","CONNECTION SUCCESSFUL",JOptionPane.INFORMATION_MESSAGE);
 			else JOptionPane.showMessageDialog(this, "ERROR MYSQL, NO SE LOGRO ESTABLECER CONEXIÓN.","CONNECTION FAILED.",JOptionPane.WARNING_MESSAGE);
-		} else {
-			JOptionPane.showMessageDialog(this, "SELECCIONE EL TIPO DE CONEXIÓN A UTILIZAR.","CONNECTION FAILED.",JOptionPane.WARNING_MESSAGE);
-		}
+		} else  JOptionPane.showMessageDialog(this, "SELECCIONE EL TIPO DE CONEXIÓN A UTILIZAR.","CONNECTION FAILED.",JOptionPane.WARNING_MESSAGE);
 	}
 	
 	private void initComponents() {
@@ -282,8 +282,22 @@ public class Vista extends JFrame {
         pack();
     }
 	
-	
-	public static void main(String[] args) {
-		new Vista().setVisible(true);
-	}
+	public static void main(String args[]) {
+        try {
+            javax.swing.UIManager.setLookAndFeel("com.birosoft.liquid.LiquidLookAndFeel");
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(Vista.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(Vista.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(Vista.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(Vista.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new Vista().setVisible(true);
+            }
+        });
+    }
 }

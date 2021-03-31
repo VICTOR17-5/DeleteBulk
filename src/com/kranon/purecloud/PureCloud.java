@@ -17,7 +17,7 @@ public class PureCloud {
 
 	private final Integer MAX_DELETE_BULK = 100;
 	private final Integer MAX_SEARCH_BULK = 50;
-	private final Integer TIME_SLEEP_TO_REQUEST = 100;
+	private final Integer TIME_SLEEP_TO_REQUEST = 500;
 	
 	private String vsUUI = "";
 	private String vsAccessToken = "ERROR";

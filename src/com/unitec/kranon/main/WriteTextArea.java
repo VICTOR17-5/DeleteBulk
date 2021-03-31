@@ -21,7 +21,7 @@ public class WriteTextArea extends Thread {
 			String voStringBuffer = voBuffer.GetBuffer();
 			voTextAreaInfo.setText(voStringBuffer);
 			try {
-				Thread.sleep(50);
+				Thread.sleep(10);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}

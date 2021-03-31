@@ -28,6 +28,7 @@ public class ThreadDelete extends Thread {
 	
 	private Integer viDeletedOK = 0, viDeletedKO = 0;
 	private Integer TIME_SLEEP = 100;
+	private Integer viNumRegistro = 0;
 	
 	public ThreadDelete(String[] vaConfi, String vsUUI, Buffer voBuffer,
 			Map<String, List<String>> voMapProduccion, Map<String, List<String>> voMapEliminados, 
@@ -98,7 +99,7 @@ public class ThreadDelete extends Thread {
 							
 							for (String vsInfo : voEntryList.getValue()) {
 								String[] vaSplit = vsInfo.split(",");
-								voBuffer.SetBuffer("[SUCCESS] REGISTRO[" + vsInfo + "], STATUS[Deleted successful]\n");
+								voBuffer.SetBuffer("[" + (++viNumRegistro) + "][SUCCESS] REGISTRO[" + vsInfo + "], STATUS[Deleted successful]\n");
 								Log.GuardaLog("deleteSuccess", "[" + new Date() + "][" + vsUUI + "][ThreadDelete][INFO] ---> CODE[200], STATUS[Contact delete successful], REGISTRO[" + vsInfo + "]");
 								if (voMapEliminadosOK.get(vaSplit[0]) == null) {
 									List<String> vlContcts = new ArrayList<String>();
@@ -117,7 +118,7 @@ public class ThreadDelete extends Thread {
 							for (String vsInfo : voEntryList.getValue()) {
 								String[] vaSplitInfo = vsInfo.split(",");
 								if(vsIdsEncontrados.contains(vaSplitInfo[2])) {
-									voBuffer.SetBuffer("[FAILURE] REGISTRO[" + vsInfo + "], STATUS[It wasn't removed successfully the contact]\n");
+									voBuffer.SetBuffer("[" + (++viNumRegistro) + "][FAILURE] REGISTRO[" + vsInfo + "], STATUS[It wasn't removed successfully the contact]\n");
 									Log.GuardaLog("deleteFailure", "[" + new Date() + "][" + vsUUI + "][ThreadDelete][INFO] ---> CODE[500], STATUS[It wasn't removed successfully the contact], REGISTRO[" + vsInfo + "]");
 									if (voMapEliminadosKO.get(vaSplitInfo[0]) == null) {
 										List<String> vlContcts = new ArrayList<String>();
@@ -130,7 +131,7 @@ public class ThreadDelete extends Thread {
 									}
 									viDeletedKO++;
 								} else {
-									voBuffer.SetBuffer("[SUCCESS] REGISTRO[" + vsInfo + "], STATUS[The contactId delete successful]\n");
+									voBuffer.SetBuffer("[" + (++viNumRegistro) + "][SUCCESS] REGISTRO[" + vsInfo + "], STATUS[The contactId delete successful]\n");
 									Log.GuardaLog("deleteSuccess", "[" + new Date() + "][" + vsUUI + "][ThreadDelete][INFO] ---> CODE[200], STATUS[Contact delete successful], REGISTRO[" + vsInfo + "]");
 									if (voMapEliminadosOK.get(vaSplitInfo[0]) == null) {
 										List<String> vlContcts = new ArrayList<String>();
@@ -156,7 +157,7 @@ public class ThreadDelete extends Thread {
 						
 						//SE ENCUENTRA EL REGISTRO EN LA LISTA DE LOS "NO" ELIMINADOS
 						if (vsData.contains(vaSplitInfo[2])) {
-							voBuffer.SetBuffer("[FAILURE] REGISTRO[" + vsInfo + "], STATUS[It wasn't removed successfully the contact]\n");
+							voBuffer.SetBuffer("[" + (++viNumRegistro) + "][FAILURE] REGISTRO[" + vsInfo + "], STATUS[It wasn't removed successfully the contact]\n");
 							Log.GuardaLog("deleteFailure", "[" + new Date() + "][" + vsUUI + "][ThreadDelete][INFO] ---> CODE[500], STATUS[It wasn't removed successfully the contact], REGISTRO[" + vsInfo + "]");
 							if (voMapEliminadosKO.get(vaSplitInfo[0]) == null) {
 								List<String> vlContcts = new ArrayList<String>();
@@ -175,7 +176,7 @@ public class ThreadDelete extends Thread {
 							Map<String, String> voMapResultSearch = voPureCloud.SearchContactId(vsContactList, vaSplitInfo[2]);
 							
 							if(voMapResultSearch.get("status").equals("404")) {
-								voBuffer.SetBuffer("[SUCCESS] REGISTRO[" + vsInfo + "], STATUS[Delete successful]\n");
+								voBuffer.SetBuffer("[" + (++viNumRegistro) + "][SUCCESS] REGISTRO[" + vsInfo + "], STATUS[Delete successful]\n");
 								Log.GuardaLog("deleteSuccess", "[" + new Date() + "][" + vsUUI + "][ThreadDelete][INFO] ---> CODE[200], STATUS[Contact delete successful], REGISTRO[" + vsInfo + "]");
 								if (voMapEliminadosOK.get(vaSplitInfo[0]) == null) {
 									List<String> vlContcts = new ArrayList<String>();
@@ -188,7 +189,7 @@ public class ThreadDelete extends Thread {
 								}
 								viDeletedOK++;
 							} else {
-								voBuffer.SetBuffer("[FAILURE] REGISTRO[" + vsInfo + "], STATUS[It wasn't removed successfully the contact]\n");
+								voBuffer.SetBuffer("[" + (++viNumRegistro) + "][FAILURE] REGISTRO[" + vsInfo + "], STATUS[It wasn't removed successfully the contact]\n");
 								Log.GuardaLog("deleteFailure", "[" + new Date() + "][" + vsUUI + "][ThreadDelete][INFO] ---> CODE[500], STATUS[It wasn't removed successfully the contact], REGISTRO[" + vsInfo + "]");
 								if (voMapEliminadosKO.get(vaSplitInfo[0]) == null) {
 									List<String> vlContcts = new ArrayList<String>();
@@ -209,7 +210,7 @@ public class ThreadDelete extends Thread {
 			} else {
 				for (String vsInfo : voEntryList.getValue()) {
 					String[] vaSplitInfo = vsInfo.split(",");
-					voBuffer.SetBuffer("[FAILURE][404] REGISTRO[" + vsInfo + "], STATUS[ContactList not found]\n");
+					voBuffer.SetBuffer("[" + (++viNumRegistro) + "][FAILURE][404] REGISTRO[" + vsInfo + "], STATUS[ContactList not found]\n");
 					Log.GuardaLog("deleteFailure", "[" + new Date() + "][" + vsUUI + "][ThreadDelete][INFO] ---> CODE[404], STATUS[ContactList not found], REGISTRO[" + vsInfo + "]");
 					if (voMapEliminadosKO.get(vaSplitInfo[0]) == null) {
 						List<String> vlContcts = new ArrayList<String>();
@@ -224,8 +225,7 @@ public class ThreadDelete extends Thread {
 				}
 			}
 			
-			if(TIME_SLEEP == null || TIME_SLEEP <= 0) TIME_SLEEP = 100;
-			
+			if(TIME_SLEEP == null || TIME_SLEEP <= 0) TIME_SLEEP = 1000;
 			try {
 				Thread.sleep(TIME_SLEEP);
 			} catch (InterruptedException e) {
