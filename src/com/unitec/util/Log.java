@@ -1,4 +1,4 @@
-package com.unitec.kranon.util;
+package com.unitec.util;
 
 import java.io.FileWriter;
 import java.io.PrintWriter;

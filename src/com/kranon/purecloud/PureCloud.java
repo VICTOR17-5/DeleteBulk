@@ -11,7 +11,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import com.kranon.conexionHttp.*;
-import com.unitec.kranon.util.Log;
+import com.unitec.util.Log;
 
 public class PureCloud {
 

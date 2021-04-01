@@ -1,4 +1,4 @@
-package com.unitec.kranon.main;
+package com.unitec.main;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,7 +11,7 @@ import java.util.Map.Entry;
 
 import com.kranon.conexionSQL.ConexionMySQL;
 import com.kranon.conexionSQL.ConexionSQL;
-import com.unitec.kranon.util.Log;
+import com.unitec.util.Log;
 
 public class ThreadValidate extends Thread {
 	private String vsUUI;

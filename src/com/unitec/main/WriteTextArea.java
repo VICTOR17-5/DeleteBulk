@@ -1,4 +1,4 @@
-package com.unitec.kranon.main;
+package com.unitec.main;
 
 import javax.swing.JTextArea;
 

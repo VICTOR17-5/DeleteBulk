@@ -1,4 +1,4 @@
-package com.unitec.kranon.main;
+package com.unitec.main;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -6,7 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Date;
 
-import com.unitec.kranon.util.Log;
+import com.unitec.util.Log;
 
 public class ThreadSearch extends Thread {
 	private String vsUUI;

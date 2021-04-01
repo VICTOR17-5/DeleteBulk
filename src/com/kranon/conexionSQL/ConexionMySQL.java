@@ -8,7 +8,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Date;
 import java.util.Properties;
-import com.unitec.kranon.util.Log;
+
+import com.unitec.util.Log;
 
 public class ConexionMySQL {
 	
@@ -17,16 +18,13 @@ public class ConexionMySQL {
 	private String vsConfi = "C:/Appl/UNITEC/DeleteRegistro/Configuraciones/conf.properties";
 	private final String url = "jdbc:mysql://";
 	private String serverName = "VPAREDES";
-	private String portNumber = "5678";
+	private String portNumber = "3309";
 	private String database = "insertcontactunitec";
 	private String userName = "sa";
 	private String password = "Kranon01#";
 	
 	private Process voProcess = null;
 	
-	private String vsProxy = "\"C:/Appl/UNITEC/DeleteRegistro/Proxy/cloud_sql_proxy.exe\" "
-			+ "-instances=\"visualdialer:us-central1:insertcontactunitec\"=tcp:" + portNumber + " "
-			+ "-credential_file=\"C:/Appl/UNITEC/DeleteRegistro/Proxy/visualdialer-6c40d83db191.json\" &";
 	
 	public ConexionMySQL(String vsUUI) {
 		this.vsUUI = vsUUI;
@@ -52,12 +50,18 @@ public class ConexionMySQL {
 	}
 	
 	public void CreateProxy() {
-		Runtime aplicacion = Runtime.getRuntime(); 
-		try{
-        	voProcess = aplicacion.exec(vsProxy); 
-        }catch(Exception e){
-        	Log.GuardaLog("[" + new Date() + "][" + vsUUI + "][CreateProxy][ERROR] ---> EXEC: " + e.getMessage());
-        }
+		if(voConnection != null) {
+			String vsProxy = "\"C:/Appl/UNITEC/DeleteRegistro/Proxy/cloud_sql_proxy.exe\" "
+					+ "-instances=\"visualdialer:us-central1:insertcontactunitec\"=tcp:" + portNumber + " "
+					+ "-credential_file=\"C:/Appl/UNITEC/DeleteRegistro/Proxy/visualdialer-6c40d83db191.json\" &";
+			
+			Runtime aplicacion = Runtime.getRuntime(); 
+			try{
+	        	voProcess = aplicacion.exec(vsProxy); 
+	        }catch(Exception e){
+	        	Log.GuardaLog("[" + new Date() + "][" + vsUUI + "][CreateProxy][ERROR] ---> EXEC: " + e.getMessage());
+	        }
+		}
 	}
 	
 	public Boolean getConnection() {

@@ -9,7 +9,7 @@ import java.sql.Statement;
 import java.util.Date;
 import java.util.Properties;
 
-import com.unitec.kranon.util.Log;
+import com.unitec.util.Log;
 
 public class ConexionSQL {
 	public String vsUUI = "N/A";

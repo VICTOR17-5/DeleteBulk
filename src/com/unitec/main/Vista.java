@@ -1,4 +1,4 @@
-package com.unitec.kranon.main;
+package com.unitec.main;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -12,8 +12,8 @@ import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import com.kranon.conexionSQL.ConexionMySQL;
 import com.kranon.conexionSQL.ConexionSQL;
-import com.unitec.kranon.util.Log;
-import com.unitec.kranon.util.Utilidades;
+import com.unitec.util.Log;
+import com.unitec.util.Utilidades;
 
 public class Vista extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -34,7 +34,7 @@ public class Vista extends JFrame {
     private JPanel voPanelPrincipal;
     private JScrollPane voScroll;
     private JTextArea voTextAreaResultados;
-    private JButton voButtonEliminar , voButtonValidar, voButtonBuscar;
+    private JButton voButtonEliminar, voButtonValidar, voButtonBuscar;
     private JSeparator voSeparatorTittle;
     private JButton voButtonToggleTestSQL;
     private JLabel voLabelTittle;
@@ -50,6 +50,8 @@ public class Vista extends JFrame {
 	
 	public Vista() {
 		initComponents();
+		//ASI AGREGAMOS IMAGEN EN EL PROYECTO
+		setIconImage(new ImageIcon(getClass().getResource("/com/unitec/image/ICONO.png")).getImage());
 		vsUUI = java.util.UUID.randomUUID().toString();
 		voUti = new Utilidades();
 		Log.GuardaLog("[" + new Date() + "][" + vsUUI + "] ************************************** INICIANDO PROCESO **************************************");
@@ -133,10 +135,10 @@ public class Vista extends JFrame {
 		} else  JOptionPane.showMessageDialog(this, "SELECCIONE EL TIPO DE CONEXIÓN A UTILIZAR.","CONNECTION FAILED.",JOptionPane.WARNING_MESSAGE);
 	}
 	
+	
 	private void initComponents() {
 		this.setResizable(false);
 		this.setTitle("[UNITEC] CONTACTS DELETE");
-
 		voButtonGroup = new ButtonGroup();
         voPanelPrincipal = new JPanel();
         voButtonToggleTestSQL = new JButton();
@@ -284,6 +286,7 @@ public class Vista extends JFrame {
 	
 	public static void main(String args[]) {
         try {
+        	
             javax.swing.UIManager.setLookAndFeel("com.birosoft.liquid.LiquidLookAndFeel");
         } catch (ClassNotFoundException ex) {
             java.util.logging.Logger.getLogger(Vista.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);

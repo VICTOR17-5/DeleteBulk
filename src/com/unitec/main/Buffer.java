@@ -1,4 +1,4 @@
-package com.unitec.kranon.main;
+package com.unitec.main;
 
 public class Buffer {
 	private StringBuffer voBuffer;

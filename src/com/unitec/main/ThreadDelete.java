@@ -1,4 +1,4 @@
-package com.unitec.kranon.main;
+package com.unitec.main;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import com.kranon.purecloud.PureCloud;
-import com.unitec.kranon.util.Log;
+import com.unitec.util.Log;
 
 public class ThreadDelete extends Thread {
 	private String vsUUI;
